@@ -1,0 +1,1715 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#000000" />
+<title>HARSHFLIX — Tadikamalla Harshvardhan Gupta</title>
+<meta name="description" content="A Netflix-style portfolio of Tadikamalla Harshvardhan Gupta — AI & backend engineer. Patent-pending researcher. Multi-agent systems, RAG, FastAPI." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+<style>
+/* =========================================================
+   TOKENS
+========================================================= */
+:root {
+  --black: #000000;
+  --bg: #141414;
+  --bg-2: #181818;
+  --bg-3: #232323;
+  --bg-card: #2f2f2f;
+  --red: #e50914;
+  --red-hover: #f6121d;
+  --red-deep: #b00710;
+  --white: #ffffff;
+  --gray: #b3b3b3;
+  --gray-2: #808080;
+  --green: #46d369;
+  --line: rgba(255, 255, 255, 0.1);
+
+  --font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --display: "Bebas Neue", "Inter", sans-serif;
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --nav-h: 68px;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+body.locked { overflow: hidden; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; padding: 0; }
+img { max-width: 100%; display: block; }
+::selection { background: var(--red); color: var(--white); }
+
+/* =========================================================
+   PROFILE PICKER (initial screen)
+========================================================= */
+.profile-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: var(--black);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 56px;
+  transition: opacity 0.7s var(--ease), visibility 0.7s;
+  padding: 40px 20px;
+}
+.profile-screen.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+.profile-screen h1 {
+  font-size: clamp(34px, 4.4vw, 56px);
+  font-weight: 400;
+  color: #e5e5e5;
+  margin: 0;
+  text-align: center;
+  letter-spacing: -0.01em;
+}
+.profile-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 28px;
+  max-width: 800px;
+  width: 100%;
+  justify-items: center;
+}
+.profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+  transition: transform 0.25s var(--ease);
+}
+.profile:hover { transform: scale(1.05); }
+.profile-avatar {
+  width: clamp(120px, 14vw, 180px);
+  height: clamp(120px, 14vw, 180px);
+  border-radius: 8px;
+  overflow: hidden;
+  border: 3px solid transparent;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  background: var(--bg-3);
+}
+.profile:hover .profile-avatar { border-color: var(--white); box-shadow: 0 0 0 4px rgba(229, 9, 20, 0.4); }
+.profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.profile-avatar.recruiter {
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #c41a4f, #e50914);
+  color: var(--white);
+  font-family: var(--display);
+  font-size: 72px;
+  letter-spacing: 0.04em;
+}
+.profile-name {
+  font-size: 18px;
+  color: var(--gray);
+  transition: color 0.2s;
+}
+.profile:hover .profile-name { color: var(--white); }
+.profile-subtitle {
+  margin-top: 32px;
+  font-size: 13px;
+  color: var(--gray-2);
+  letter-spacing: 0.04em;
+}
+
+/* =========================================================
+   NAV
+========================================================= */
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  height: var(--nav-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4%;
+  transition: background 0.4s, border-color 0.4s;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.7) 10%, transparent);
+}
+.nav.scrolled { background: var(--bg); }
+
+.nav-left { display: flex; align-items: center; gap: 32px; }
+.logo {
+  font-family: var(--display);
+  font-size: 28px;
+  color: var(--red);
+  letter-spacing: 0.04em;
+  font-weight: 400;
+  line-height: 1;
+  user-select: none;
+}
+.logo span { color: var(--white); }
+
+.nav-links { display: none; gap: 22px; }
+.nav-links a {
+  font-size: 14px;
+  color: #e5e5e5;
+  font-weight: 400;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--gray); }
+.nav-links a.active { font-weight: 600; }
+
+.nav-right { display: flex; align-items: center; gap: 18px; }
+.nav-icon {
+  width: 24px; height: 24px;
+  display: grid;
+  place-items: center;
+  color: var(--white);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.nav-icon:hover { color: var(--gray); }
+.nav-icon svg { width: 22px; height: 22px; }
+
+.nav-avatar {
+  width: 32px; height: 32px;
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: border-color 0.2s;
+  background: var(--bg-3);
+}
+.nav-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.nav-avatar:hover { border-color: var(--white); }
+
+@media (min-width: 880px) { .nav-links { display: flex; } }
+
+/* =========================================================
+   HERO BANNER
+========================================================= */
+.hero {
+  position: relative;
+  min-height: 88vh;
+  display: flex;
+  align-items: flex-end;
+  padding: 80px 4% 100px;
+  overflow: hidden;
+  isolation: isolate;
+}
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background:
+    radial-gradient(ellipse at 70% 30%, rgba(229, 9, 20, 0.35), transparent 55%),
+    radial-gradient(ellipse at 30% 70%, rgba(176, 7, 16, 0.4), transparent 60%),
+    linear-gradient(135deg, #1a0508 0%, #0a0a0a 50%, #1f0608 100%);
+}
+.hero-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(229, 9, 20, 0.15) 0%, transparent 8%),
+    radial-gradient(circle at 80% 60%, rgba(229, 9, 20, 0.1) 0%, transparent 6%),
+    radial-gradient(circle at 50% 80%, rgba(229, 9, 20, 0.08) 0%, transparent 5%);
+  filter: blur(2px);
+}
+.hero-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.6) 30%, transparent 60%),
+    linear-gradient(0deg, var(--black) 0%, rgba(0, 0, 0, 0.6) 25%, transparent 60%);
+}
+.hero-content { max-width: 620px; position: relative; z-index: 1; }
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--white);
+  margin-bottom: 16px;
+  letter-spacing: 0.02em;
+}
+.hero-badge::before {
+  content: "F"; /* "Featured" */
+  font-family: var(--display);
+  font-size: 18px;
+  background: var(--red);
+  color: var(--white);
+  padding: 2px 7px;
+  border-radius: 2px;
+  letter-spacing: 0.05em;
+}
+.hero-badge .label { color: #d2d2d2; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; }
+
+.hero-title {
+  font-family: var(--display);
+  font-size: clamp(56px, 8vw, 104px);
+  font-weight: 400;
+  line-height: 0.95;
+  margin: 0 0 18px;
+  letter-spacing: 0.01em;
+  color: var(--white);
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+}
+
+.hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: center;
+  margin-bottom: 16px;
+  font-size: 14px;
+  color: #d2d2d2;
+}
+.hero-meta .match { color: var(--green); font-weight: 600; }
+.hero-meta .dot { width: 4px; height: 4px; background: var(--gray-2); border-radius: 50%; }
+.hero-meta .pill { padding: 2px 8px; border: 1px solid rgba(255, 255, 255, 0.4); border-radius: 3px; font-size: 11px; font-weight: 500; letter-spacing: 0.04em; }
+
+.hero-desc {
+  font-size: clamp(15px, 1.4vw, 18px);
+  line-height: 1.45;
+  color: #e5e5e5;
+  margin: 0 0 28px;
+  max-width: 540px;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.hero-actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 28px;
+  border-radius: 4px;
+  font-size: 15px;
+  font-weight: 600;
+  transition: opacity 0.2s, background 0.2s, color 0.2s;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.btn-play { background: var(--white); color: var(--black); }
+.btn-play:hover { background: rgba(255, 255, 255, 0.75); }
+.btn-info { background: rgba(109, 109, 110, 0.7); color: var(--white); }
+.btn-info:hover { background: rgba(109, 109, 110, 0.4); }
+.btn svg { width: 22px; height: 22px; flex-shrink: 0; }
+
+/* =========================================================
+   ROWS
+========================================================= */
+.rows { padding-bottom: 80px; margin-top: -60px; position: relative; z-index: 2; }
+.row { padding: 28px 0 12px; }
+.row-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 0 4% 14px;
+}
+.row-title {
+  font-size: clamp(18px, 1.6vw, 24px);
+  font-weight: 600;
+  color: var(--white);
+  margin: 0;
+  letter-spacing: -0.005em;
+}
+.row-title:hover .explore { opacity: 1; transform: translateX(0); }
+.row-title .explore {
+  font-size: 13px;
+  color: #54b9c5;
+  font-weight: 600;
+  margin-left: 12px;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+.row-scroller-wrap { position: relative; }
+.row-scroller {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  overflow-y: visible;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  padding: 32px 4% 36px;
+  scrollbar-width: none;
+}
+.row-scroller::-webkit-scrollbar { display: none; }
+
+.scroll-btn {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 4%;
+  z-index: 5;
+  background: rgba(20, 20, 20, 0.5);
+  color: var(--white);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s, background 0.2s;
+}
+.scroll-btn:hover { background: rgba(20, 20, 20, 0.75); }
+.scroll-btn svg { width: 32px; height: 32px; }
+.scroll-btn.left { left: 0; }
+.scroll-btn.right { right: 0; }
+.row-scroller-wrap:hover .scroll-btn { opacity: 1; }
+@media (min-width: 880px) { .scroll-btn { display: flex; } }
+
+/* Cards */
+.card {
+  flex-shrink: 0;
+  width: clamp(220px, 22vw, 320px);
+  scroll-snap-align: start;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.3s var(--ease), z-index 0s 0.3s;
+  border-radius: 6px;
+  overflow: visible;
+}
+.card:hover {
+  transform: scale(1.18) translateY(-12px);
+  z-index: 20;
+  transition: transform 0.3s var(--ease) 0.15s, z-index 0s;
+}
+.card:first-child:hover { transform: scale(1.18) translateY(-12px) translateX(20px); }
+
+.card-poster {
+  aspect-ratio: 16 / 9;
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+  background: var(--bg-3);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 16px 18px;
+}
+.card-poster::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 40%, rgba(0, 0, 0, 0.5) 80%, rgba(0, 0, 0, 0.85));
+  z-index: 1;
+}
+.card-poster > * { position: relative; z-index: 2; }
+.card-poster-pattern {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.6;
+  background-image:
+    linear-gradient(0deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+.card-tag {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 8px;
+}
+.card-name {
+  font-family: var(--display);
+  font-size: clamp(22px, 2.4vw, 32px);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: var(--white);
+  margin: 0;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
+}
+.card-sub {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.85);
+  margin-top: 6px;
+}
+
+/* Poster color variants */
+.card-poster.v-leadforge { background: linear-gradient(135deg, #6d0e10 0%, #e50914 50%, #ff6b3d 100%); }
+.card-poster.v-metaads { background: linear-gradient(135deg, #1a0a2e 0%, #5d1b8b 50%, #c41bb8 100%); }
+.card-poster.v-cot { background: linear-gradient(135deg, #03142e 0%, #0d4e8b 60%, #38bdf8 100%); }
+.card-poster.v-rag { background: linear-gradient(135deg, #052e16 0%, #16a34a 60%, #6ee7b7 100%); }
+.card-poster.v-social { background: linear-gradient(135deg, #1e293b 0%, #0e7490 50%, #5eead4 100%); }
+.card-poster.v-rr { background: linear-gradient(135deg, #1f1f1f 0%, #404040 50%, #737373 100%); }
+.card-poster.v-hb { background: linear-gradient(135deg, #422006 0%, #c2410c 50%, #fbbf24 100%); }
+.card-poster.v-cs { background: linear-gradient(135deg, #042f2e 0%, #115e59 50%, #2dd4bf 100%); }
+.card-poster.v-patent { background: linear-gradient(135deg, #422006 0%, #b45309 50%, #fde68a 100%); }
+.card-poster.v-hack { background: linear-gradient(135deg, #18181b 0%, #52525b 50%, #d4d4d8 100%); }
+.card-poster.v-edu { background: linear-gradient(135deg, #1e1b4b 0%, #4338ca 60%, #a5b4fc 100%); }
+.card-poster.v-athl { background: linear-gradient(135deg, #450a0a 0%, #991b1b 50%, #fca5a5 100%); }
+
+/* Skill card */
+.card-skill .card-poster { aspect-ratio: 4 / 3; }
+.card-poster.v-langs { background: linear-gradient(135deg, #0c0a09 0%, #44403c 50%, #fbbf24 100%); }
+.card-poster.v-llm { background: linear-gradient(135deg, #500724 0%, #be185d 50%, #f9a8d4 100%); }
+.card-poster.v-backend { background: linear-gradient(135deg, #052e16 0%, #15803d 50%, #4ade80 100%); }
+.card-poster.v-data { background: linear-gradient(135deg, #082f49 0%, #075985 50%, #38bdf8 100%); }
+.card-poster.v-db { background: linear-gradient(135deg, #1e1b4b 0%, #5b21b6 50%, #c4b5fd 100%); }
+.card-poster.v-devops { background: linear-gradient(135deg, #1c1917 0%, #525252 50%, #e7e5e4 100%); }
+
+.skill-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-top: 6px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+/* Hover info panel */
+.card-info {
+  position: absolute;
+  top: 100%;
+  left: 0; right: 0;
+  background: var(--bg-2);
+  border-radius: 0 0 6px 6px;
+  padding: 14px 16px;
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: opacity 0.25s var(--ease) 0.15s, transform 0.25s var(--ease) 0.15s;
+  pointer-events: none;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.6);
+}
+.card:hover .card-info {
+  opacity: 1;
+  transform: translateY(-2px);
+  pointer-events: auto;
+}
+.card-info-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.card-icon-btn {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--gray-2);
+  display: grid;
+  place-items: center;
+  color: var(--white);
+  background: transparent;
+  transition: background 0.2s, color 0.2s;
+}
+.card-icon-btn:hover { background: var(--white); color: var(--black); border-color: var(--white); }
+.card-icon-btn.primary { background: var(--white); color: var(--black); border-color: var(--white); }
+.card-icon-btn.primary:hover { background: rgba(255, 255, 255, 0.75); }
+.card-icon-btn svg { width: 16px; height: 16px; }
+.card-info-meta {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 12px;
+  color: var(--gray);
+  margin-bottom: 6px;
+}
+.card-info-meta .match { color: var(--green); font-weight: 600; }
+.card-info-meta .pill { padding: 1px 5px; border: 1px solid rgba(255,255,255,0.3); border-radius: 2px; font-size: 10px; letter-spacing: 0.04em; }
+.card-info-tags {
+  font-size: 12px;
+  color: var(--gray);
+  line-height: 1.4;
+}
+
+/* =========================================================
+   MODAL (More Info)
+========================================================= */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  background: rgba(0, 0, 0, 0.75);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+  overflow-y: auto;
+  padding: 60px 16px;
+}
+.modal-backdrop.open { opacity: 1; visibility: visible; }
+.modal {
+  max-width: 880px;
+  margin: 0 auto;
+  background: var(--bg-2);
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  transform: translateY(20px) scale(0.97);
+  transition: transform 0.3s var(--ease);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7);
+}
+.modal-backdrop.open .modal { transform: none; }
+
+.modal-hero {
+  aspect-ratio: 16/9;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 36px;
+  color: var(--white);
+}
+.modal-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 40%, rgba(24, 24, 24, 0.6) 75%, var(--bg-2));
+}
+.modal-hero > * { position: relative; z-index: 1; }
+.modal-title {
+  font-family: var(--display);
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight: 400;
+  line-height: 0.95;
+  letter-spacing: 0.02em;
+  margin: 0 0 18px;
+  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.7);
+}
+.modal-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+.modal-body { padding: 28px 36px 40px; }
+.modal-body-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+}
+@media (min-width: 720px) { .modal-body-grid { grid-template-columns: 1.6fr 1fr; gap: 40px; } }
+.modal-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  font-size: 13px;
+  color: var(--gray);
+  margin-bottom: 16px;
+}
+.modal-meta .match { color: var(--green); font-weight: 600; }
+.modal-meta .pill { padding: 2px 7px; border: 1px solid rgba(255,255,255,0.3); border-radius: 2px; font-size: 11px; letter-spacing: 0.04em; }
+.modal-desc { font-size: 15px; line-height: 1.55; color: #e5e5e5; margin: 0 0 16px; }
+.modal-bullets { list-style: none; margin: 16px 0 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.modal-bullets li { font-size: 14px; color: #d2d2d2; padding-left: 20px; position: relative; }
+.modal-bullets li::before { content: "▸"; color: var(--red); position: absolute; left: 0; top: 0; }
+.modal-side h4 { font-size: 13px; color: var(--gray); font-weight: 400; margin: 0 0 6px; }
+.modal-side p { font-size: 14px; color: var(--white); margin: 0 0 16px; line-height: 1.5; }
+.modal-side .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.modal-side .tags span { font-size: 11px; padding: 4px 8px; background: var(--bg-3); border-radius: 3px; color: #d2d2d2; }
+
+.modal-close {
+  position: absolute;
+  top: 16px; right: 16px;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: rgba(20, 20, 20, 0.8);
+  color: var(--white);
+  display: grid;
+  place-items: center;
+  z-index: 10;
+  transition: background 0.2s;
+}
+.modal-close:hover { background: var(--red); }
+.modal-close svg { width: 18px; height: 18px; }
+
+/* =========================================================
+   FOOTER
+========================================================= */
+.footer {
+  background: var(--black);
+  padding: 60px 4% 40px;
+  color: var(--gray);
+  font-size: 13px;
+  border-top: 1px solid var(--bg-3);
+}
+.footer-inner { max-width: 1000px; margin: 0 auto; }
+.footer-socials { display: flex; gap: 18px; margin-bottom: 28px; }
+.footer-socials a { color: var(--white); transition: color 0.2s; }
+.footer-socials a:hover { color: var(--red); }
+.footer-socials svg { width: 22px; height: 22px; }
+.footer-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 36px;
+}
+.footer-links a { color: var(--gray); display: block; padding: 4px 0; transition: color 0.2s; }
+.footer-links a:hover { color: var(--white); text-decoration: underline; }
+.footer-copy { color: var(--gray-2); font-size: 12px; }
+
+/* =========================================================
+   ANIMATIONS
+========================================================= */
+.fade-in { animation: fade 0.6s var(--ease) both; }
+@keyframes fade { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+.splash {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: var(--black);
+  display: grid;
+  place-items: center;
+  animation: splashOut 2.4s var(--ease) forwards;
+}
+.splash-text {
+  font-family: var(--display);
+  font-size: clamp(48px, 12vw, 140px);
+  color: var(--red);
+  letter-spacing: 0.04em;
+  animation: splashZoom 2.4s var(--ease) forwards;
+}
+@keyframes splashZoom {
+  0% { opacity: 0; transform: scale(0.4); }
+  20% { opacity: 1; transform: scale(1); }
+  70% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.15); }
+}
+@keyframes splashOut {
+  0%, 75% { opacity: 1; visibility: visible; }
+  100% { opacity: 0; visibility: hidden; pointer-events: none; }
+}
+
+/* =========================================================
+   PROFILE GATING (Option A — Harsh vs Recruiter views)
+========================================================= */
+body[data-profile="harsh"] .recruiter-only { display: none !important; }
+body[data-profile="recruiter"] .harsh-only { display: none !important; }
+body:not([data-profile]) .recruiter-only,
+body:not([data-profile]) .harsh-only { visibility: hidden; }
+
+/* Recruiter hero — cool blue corporate variant */
+.hero-recruiter .hero-bg {
+  background:
+    radial-gradient(ellipse at 70% 30%, rgba(30, 64, 175, 0.45), transparent 55%),
+    radial-gradient(ellipse at 30% 70%, rgba(8, 47, 73, 0.55), transparent 60%),
+    linear-gradient(135deg, #050a18 0%, #0a0a0a 50%, #051018 100%);
+}
+.hero-recruiter .hero-bg::before {
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(56, 189, 248, 0.12) 0%, transparent 8%),
+    radial-gradient(circle at 80% 60%, rgba(56, 189, 248, 0.08) 0%, transparent 6%),
+    radial-gradient(circle at 50% 80%, rgba(99, 102, 241, 0.08) 0%, transparent 5%);
+}
+.hero-recruiter .hero-badge::before {
+  background: #2563eb;
+}
+
+.hero-recruiter-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+  align-items: end;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+@media (min-width: 980px) {
+  .hero-recruiter-grid { grid-template-columns: 1.5fr 1fr; gap: 64px; align-items: center; }
+}
+
+.stats-card {
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 0 24px 18px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background-clip: padding-box;
+  overflow: hidden;
+  box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.55);
+}
+
+/* Face card section at top of stats card */
+.stats-card-photo {
+  grid-column: 1 / -1;
+  margin: 0 -24px 12px;
+  position: relative;
+  aspect-ratio: 5 / 3;
+  overflow: hidden;
+}
+.stats-card-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 22%;
+  display: block;
+}
+.stats-card-photo-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 30%, rgba(5, 10, 24, 0.4) 60%, rgba(5, 10, 24, 0.92));
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 18px 22px;
+}
+.stats-card-photo-overlay .name {
+  font-family: var(--display);
+  font-size: clamp(26px, 3vw, 34px);
+  color: var(--white);
+  letter-spacing: 0.03em;
+  line-height: 1;
+  margin: 0;
+}
+.stats-card-photo-overlay .role {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.85);
+  margin-top: 6px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.stats-card-photo-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: var(--red);
+  color: var(--white);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  padding: 4px 8px;
+  border-radius: 3px;
+  text-transform: uppercase;
+}
+.stats-card-photo-rank {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-family: var(--display);
+  font-size: 18px;
+  color: var(--white);
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  padding: 4px 10px;
+  border-radius: 4px;
+  letter-spacing: 0.04em;
+}
+.stats-card .stat {
+  padding: 14px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.stats-card .stat .num {
+  font-family: var(--display);
+  font-size: 36px;
+  line-height: 1;
+  color: var(--white);
+  letter-spacing: 0.02em;
+}
+.stats-card .stat .num.sm { font-size: 24px; }
+.stats-card .stat .lbl {
+  font-size: 11px;
+  color: var(--gray);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.stats-card-head {
+  grid-column: 1 / -1;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 12px;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.stats-card-head .ttl {
+  font-size: 13px;
+  color: var(--white);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.stats-card-head .open {
+  font-size: 11px;
+  color: var(--green);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.stats-card-head .open::before {
+  content: "";
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green);
+}
+
+/* Highlights row for recruiter — first thing they see */
+.highlight-card {
+  flex-shrink: 0;
+  width: clamp(220px, 22vw, 280px);
+  aspect-ratio: 4/3;
+  scroll-snap-align: start;
+  border-radius: 8px;
+  padding: 22px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+  cursor: default;
+  transition: transform 0.3s var(--ease);
+}
+.highlight-card:hover { transform: translateY(-4px); }
+.highlight-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 40%, rgba(0, 0, 0, 0.5) 80%, rgba(0, 0, 0, 0.85));
+  z-index: 0;
+}
+.highlight-card > * { position: relative; z-index: 1; }
+.highlight-card .tag {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.9);
+}
+.highlight-card .num {
+  font-family: var(--display);
+  font-size: clamp(48px, 4vw, 72px);
+  line-height: 1;
+  color: var(--white);
+  letter-spacing: 0.02em;
+  margin: 8px 0 0;
+}
+.highlight-card .ttl {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--white);
+  margin-top: 6px;
+}
+.highlight-card .desc {
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.85);
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+.highlight-card.v-patent { background: linear-gradient(135deg, #422006 0%, #b45309 50%, #fde68a 100%); }
+.highlight-card.v-companies { background: linear-gradient(135deg, #1e1b4b 0%, #4338ca 50%, #a5b4fc 100%); }
+.highlight-card.v-cgpa { background: linear-gradient(135deg, #052e16 0%, #16a34a 50%, #86efac 100%); }
+.highlight-card.v-hack { background: linear-gradient(135deg, #500724 0%, #be185d 50%, #f9a8d4 100%); }
+.highlight-card.v-avail { background: linear-gradient(135deg, #082f49 0%, #0891b2 50%, #67e8f9 100%); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01s !important; transition-duration: 0.01s !important; }
+}
+</style>
+</head>
+<body class="locked">
+
+<!-- ========================== SPLASH ========================== -->
+<div class="splash"><div class="splash-text">HARSHFLIX</div></div>
+
+<!-- ========================== PROFILE PICKER ========================== -->
+<div class="profile-screen" id="profileScreen">
+  <h1>Who's watching?</h1>
+  <div class="profile-list">
+    <div class="profile" data-name="Harsh">
+      <div class="profile-avatar">
+        <img src="assets/harshvardhan-gupta-profile.jpeg" alt="Harsh" />
+      </div>
+      <div class="profile-name">Harsh</div>
+    </div>
+    <div class="profile" data-name="Recruiter">
+      <div class="profile-avatar recruiter">R</div>
+      <div class="profile-name">Recruiter</div>
+    </div>
+  </div>
+  <div class="profile-subtitle">Manage Profiles</div>
+</div>
+
+<!-- ========================== NAV ========================== -->
+<nav class="nav" id="nav">
+  <div class="nav-left">
+    <span class="logo">HARSH<span>FLIX</span></span>
+    <div class="nav-links">
+      <a href="#top" class="active">Home</a>
+      <a href="#projects">Projects</a>
+      <a href="#experience">Experience</a>
+      <a href="#skills">Skills</a>
+      <a href="#honors">My List</a>
+    </div>
+  </div>
+  <div class="nav-right">
+    <a href="https://github.com/harsh20048" target="_blank" rel="noopener" class="nav-icon" title="GitHub">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.16c-3.34.72-4.04-1.41-4.04-1.41-.55-1.39-1.34-1.76-1.34-1.76-1.1-.75.08-.74.08-.74 1.21.09 1.85 1.24 1.85 1.24 1.08 1.85 2.84 1.32 3.53 1.01.11-.78.42-1.32.76-1.62-2.67-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.39 1.24-3.23-.12-.31-.54-1.53.12-3.19 0 0 1.01-.32 3.31 1.23A11.46 11.46 0 0 1 12 5.8c1.02 0 2.05.14 3.01.4 2.3-1.55 3.31-1.23 3.31-1.23.66 1.66.24 2.88.12 3.19.77.84 1.24 1.92 1.24 3.23 0 4.62-2.81 5.65-5.49 5.94.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.56 21.8 24 17.31 24 12c0-6.63-5.37-12-12-12z"/></svg>
+    </a>
+    <a href="https://www.linkedin.com/in/harshvardhan-gupta-t-099854287/" target="_blank" rel="noopener" class="nav-icon" title="LinkedIn">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 0H5C2.24 0 0 2.24 0 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5V5c0-2.76-2.24-5-5-5zM8 19H5V8h3v11zM6.5 6.73c-.97 0-1.75-.79-1.75-1.76s.78-1.75 1.75-1.75 1.75.78 1.75 1.75-.78 1.76-1.75 1.76zM20 19h-3v-5.6c0-3.37-4-3.11-4 0V19h-3V8h3v1.77c1.4-2.59 7-2.78 7 2.47V19z"/></svg>
+    </a>
+    <div class="nav-avatar" id="navAvatar" title="Switch profile">
+      <img src="assets/harshvardhan-gupta-profile.jpeg" alt="Harsh" />
+    </div>
+  </div>
+</nav>
+
+<!-- ========================== HERO (Harsh) ========================== -->
+<header class="hero harsh-only" id="top">
+  <div class="hero-bg"></div>
+  <div class="hero-vignette"></div>
+  <div class="hero-content fade-in">
+    <div class="hero-badge"><span class="label">Featured Project</span></div>
+    <h1 class="hero-title">LeadForge AI</h1>
+    <div class="hero-meta">
+      <span class="match">98% Match</span>
+      <span class="pill">2025</span>
+      <span>Multi-Agent</span>
+      <span class="dot"></span>
+      <span>Production</span>
+      <span class="dot"></span>
+      <span class="pill">HD</span>
+    </div>
+    <p class="hero-desc">
+      An AI-assisted B2B lead discovery platform. A multi-agent LangGraph pipeline researches funding signals, hiring activity, tech stacks, and public filings across six data sources, then scores companies by buying intent. Built at HustleBee on FastAPI + React.
+    </p>
+    <div class="hero-actions">
+      <button class="btn btn-play" data-modal="leadforge">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7L8 5z"/></svg>
+        Play
+      </button>
+      <button class="btn btn-info" data-modal="leadforge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        More Info
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ========================== HERO (Recruiter) ========================== -->
+<header class="hero hero-recruiter recruiter-only" id="topRecruiter">
+  <div class="hero-bg"></div>
+  <div class="hero-vignette"></div>
+  <div class="container hero-recruiter-grid" style="padding: 0 4%;">
+    <div class="hero-content fade-in" style="max-width: 640px;">
+      <div class="hero-badge"><span class="label">Top Pick for You · Engineering</span></div>
+      <h1 class="hero-title">Harsh Gupta</h1>
+      <div class="hero-meta">
+        <span class="match">99% Match</span>
+        <span class="pill">Open · June 2026</span>
+        <span>AI &amp; Backend Engineer</span>
+        <span class="dot"></span>
+        <span>Pune · Remote</span>
+        <span class="dot"></span>
+        <span class="pill">HD</span>
+      </div>
+      <p class="hero-desc">
+        Final-year CS @ SRM Institute of Science and Technology (CGPA 8.04). Patent-pending researcher. Shipped production AI work across <strong>Rolls-Royce Power Systems</strong>, <strong>Contisoft Technologies</strong>, and <strong>HustleBee Software</strong>. Specialises in multi-agent LLM systems, RAG pipelines, and FastAPI backends. Available for full-time engineering roles starting June 2026.
+      </p>
+      <div class="hero-actions">
+        <a href="assets/Harshvardhan_Gupta_Resume.pdf" target="_blank" rel="noopener" class="btn btn-play">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Download Résumé
+        </a>
+        <a href="mailto:harsh20048@gmail.com" class="btn btn-info">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          Email Harsh
+        </a>
+      </div>
+    </div>
+
+    <aside class="stats-card fade-in">
+      <div class="stats-card-photo">
+        <img src="assets/harshvardhan-gupta-profile.jpeg" alt="Tadikamalla Harshvardhan Gupta" />
+        <span class="stats-card-photo-badge">Top Pick</span>
+        <span class="stats-card-photo-rank">#1</span>
+        <div class="stats-card-photo-overlay">
+          <div class="name">Harsh Gupta</div>
+          <div class="role">AI &amp; Backend Engineer</div>
+        </div>
+      </div>
+      <div class="stats-card-head">
+        <span class="ttl">At a glance</span>
+        <span class="open">Available</span>
+      </div>
+      <div class="stat"><div class="num">1</div><div class="lbl">Patent filed</div></div>
+      <div class="stat"><div class="num">3</div><div class="lbl">Internships</div></div>
+      <div class="stat"><div class="num">8.04</div><div class="lbl">CGPA / 10</div></div>
+      <div class="stat"><div class="num sm">Top 5</div><div class="lbl">ACE Hack '24</div></div>
+    </aside>
+  </div>
+</header>
+
+<!-- ========================== CONTENT ROWS ========================== -->
+<main class="rows">
+
+  <!-- Recruiter-only Highlights row -->
+  <section class="row recruiter-only" id="highlights">
+    <div class="row-header">
+      <h2 class="row-title">Why Harsh</h2>
+    </div>
+    <div class="row-scroller-wrap">
+      <button class="scroll-btn left" data-scroll="prev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></button>
+      <div class="row-scroller">
+        <div class="highlight-card v-patent">
+          <div class="tag">Research</div>
+          <div>
+            <div class="num">Patent</div>
+            <div class="ttl">Filed — LLM Reasoning</div>
+            <div class="desc">Semantic Compression of Chain-of-Thought Reasoning in Large Language Models.</div>
+          </div>
+        </div>
+        <div class="highlight-card v-companies">
+          <div class="tag">Experience</div>
+          <div>
+            <div class="num">3</div>
+            <div class="ttl">Industry internships</div>
+            <div class="desc">Rolls-Royce Power Systems · Contisoft · HustleBee Software.</div>
+          </div>
+        </div>
+        <div class="highlight-card v-cgpa">
+          <div class="tag">Academics</div>
+          <div>
+            <div class="num">8.04</div>
+            <div class="ttl">CGPA / 10</div>
+            <div class="desc">B.Tech Computer Science · SRM IST · Graduating June 2026.</div>
+          </div>
+        </div>
+        <div class="highlight-card v-hack">
+          <div class="tag">Recognition</div>
+          <div>
+            <div class="num">Top 5</div>
+            <div class="ttl">ACE Hack 2024</div>
+            <div class="desc">Out of 99 competing teams in the national hackathon.</div>
+          </div>
+        </div>
+        <div class="highlight-card v-avail">
+          <div class="tag">Status</div>
+          <div>
+            <div class="num">June</div>
+            <div class="ttl">Available 2026</div>
+            <div class="desc">Open to full-time AI engineering and backend roles. Remote-friendly.</div>
+          </div>
+        </div>
+      </div>
+      <button class="scroll-btn right" data-scroll="next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
+    </div>
+  </section>
+
+  <!-- Featured Projects -->
+  <section class="row" id="projects">
+    <div class="row-header">
+      <h2 class="row-title" data-title-harsh="Featured Projects" data-title-recruiter="Top Picks for Recruiters">Featured Projects <span class="explore">Explore All →</span></h2>
+    </div>
+    <div class="row-scroller-wrap">
+      <button class="scroll-btn left" data-scroll="prev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></button>
+      <div class="row-scroller">
+
+        <article class="card" data-modal="leadforge">
+          <div class="card-poster v-leadforge">
+            <div class="card-poster-pattern"></div>
+            <div class="card-tag">Multi-Agent · 2025</div>
+            <h3 class="card-name">LeadForge AI</h3>
+            <div class="card-sub">B2B Lead Discovery</div>
+          </div>
+          <div class="card-info">
+            <div class="card-info-row">
+              <button class="card-icon-btn primary" title="View"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7L8 5z"/></svg></button>
+              <a class="card-icon-btn" href="https://github.com/harsh20048" target="_blank" rel="noopener" title="GitHub"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.16c-3.34.72-4.04-1.41-4.04-1.41-.55-1.39-1.34-1.76-1.34-1.76-1.1-.75.08-.74.08-.74 1.21.09 1.85 1.24 1.85 1.24 1.08 1.85 2.84 1.32 3.53 1.01.11-.78.42-1.32.76-1.62-2.67-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.39 1.24-3.23-.12-.31-.54-1.53.12-3.19 0 0 1.01-.32 3.31 1.23A11.46 11.46 0 0 1 12 5.8c1.02 0 2.05.14 3.01.4 2.3-1.55 3.31-1.23 3.31-1.23.66 1.66.24 2.88.12 3.19.77.84 1.24 1.92 1.24 3.23 0 4.62-2.81 5.65-5.49 5.94.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.56 21.8 24 17.31 24 12c0-6.63-5.37-12-12-12z"/></svg></a>
+              <button class="card-icon-btn" title="More Info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+            </div>
+            <div class="card-info-meta">
+              <span class="match">98% Match</span>
+              <span class="pill">2025</span>
+              <span>Flagship</span>
+            </div>
+            <div class="card-info-tags">FastAPI · LangGraph · React</div>
+          </div>
+        </article>
+
+        <article class="card" data-modal="metaads">
+          <div class="card-poster v-metaads">
+            <div class="card-poster-pattern"></div>
+            <div class="card-tag">Production · 2025</div>
+            <h3 class="card-name">Meta Ads Studio</h3>
+            <div class="card-sub">Autonomous Ad Generation</div>
+          </div>
+          <div class="card-info">
+            <div class="card-info-row">
+              <button class="card-icon-btn primary" title="View"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7L8 5z"/></svg></button>
+              <a class="card-icon-btn" href="https://github.com/harsh20048" target="_blank" rel="noopener" title="GitHub"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.16c-3.34.72-4.04-1.41-4.04-1.41-.55-1.39-1.34-1.76-1.34-1.76-1.1-.75.08-.74.08-.74 1.21.09 1.85 1.24 1.85 1.24 1.08 1.85 2.84 1.32 3.53 1.01.11-.78.42-1.32.76-1.62-2.67-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.39 1.24-3.23-.12-.31-.54-1.53.12-3.19 0 0 1.01-.32 3.31 1.23A11.46 11.46 0 0 1 12 5.8c1.02 0 2.05.14 3.01.4 2.3-1.55 3.31-1.23 3.31-1.23.66 1.66.24 2.88.12 3.19.77.84 1.24 1.92 1.24 3.23 0 4.62-2.81 5.65-5.49 5.94.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.56 21.8 24 17.31 24 12c0-6.63-5.37-12-12-12z"/></svg></a>
+              <button class="card-icon-btn" title="More Info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+            </div>
+            <div class="card-info-meta">
+              <span class="match">96% Match</span>
+              <span class="pill">2025</span>
+              <span>Microservices</span>
+            </div>
+            <div class="card-info-tags">FastAPI · RabbitMQ · PostgreSQL</div>
+          </div>
+        </article>
+
+        <article class="card" data-modal="cot">
+          <div class="card-poster v-cot">
+            <div class="card-poster-pattern"></div>
+            <div class="card-tag">Research · Patent</div>
+            <h3 class="card-name">Semantic CoT</h3>
+            <div class="card-sub">Compression in LLMs</div>
+          </div>
+          <div class="card-info">
+            <div class="card-info-row">
+              <button class="card-icon-btn primary" title="View"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7L8 5z"/></svg></button>
+              <a class="card-icon-btn" href="https://github.com/harsh20048" target="_blank" rel="noopener" title="GitHub"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.16c-3.34.72-4.04-1.41-4.04-1.41-.55-1.39-1.34-1.76-1.34-1.76-1.1-.75.08-.74.08-.74 1.21.09 1.85 1.24 1.85 1.24 1.08 1.85 2.84 1.32 3.53 1.01.11-.78.42-1.32.76-1.62-2.67-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.39 1.24-3.23-.12-.31-.54-1.53.12-3.19 0 0 1.01-.32 3.31 1.23A11.46 11.46 0 0 1 12 5.8c1.02 0 2.05.14 3.01.4 2.3-1.55 3.31-1.23 3.31-1.23.66 1.66.24 2.88.12 3.19.77.84 1.24 1.92 1.24 3.23 0 4.62-2.81 5.65-5.49 5.94.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.56 21.8 24 17.31 24 12c0-6.63-5.37-12-12-12z"/></svg></a>
+              <button class="card-icon-btn" title="More Info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+            </div>
+            <div class="card-info-meta">
+              <span class="match">99% Match</span>
+              <span class="pill">Patent</span>
+              <span>Research</span>
+            </div>
+            <div class="card-info-tags">TypeScript · Ollama · GSM8K</div>
+          </div>
+        </article>
+
+        <article class="card" data-modal="rag">
+          <div class="card-poster v-rag">
+            <div class="card-poster-pattern"></div>
+            <div class="card-tag">RAG · 2024</div>
+            <h3 class="card-name">Auto-Learning RAG</h3>
+            <div class="card-sub">Self-Learning Chatbot</div>
+          </div>
+          <div class="card-info">
+            <div class="card-info-row">
+              <button class="card-icon-btn primary" title="View"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7L8 5z"/></svg></button>
+              <a class="card-icon-btn" href="https://github.com/harsh20048" target="_blank" rel="noopener" title="GitHub"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.16c-3.34.72-4.04-1.41-4.04-1.41-.55-1.39-1.34-1.76-1.34-1.76-1.1-.75.08-.74.08-.74 1.21.09 1.85 1.24 1.85 1.24 1.08 1.85 2.84 1.32 3.53 1.01.11-.78.42-1.32.76-1.62-2.67-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.39 1.24-3.23-.12-.31-.54-1.53.12-3.19 0 0 1.01-.32 3.31 1.23A11.46 11.46 0 0 1 12 5.8c1.02 0 2.05.14 3.01.4 2.3-1.55 3.31-1.23 3.31-1.23.66 1.66.24 2.88.12 3.19.77.84 1.24 1.92 1.24 3.23 0 4.62-2.81 5.65-5.49 5.94.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.56 21.8 24 17.31 24 12c0-6.63-5.37-12-12-12z"/></svg></a>
+              <button class="card-icon-btn" title="More Info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+            </div>
+            <div class="card-info-meta">
+              <span class="match">94% Match</span>
+              <span class="pill">2024</span>
+              <span>Deployed</span>
+            </div>
+            <div class="card-info-tags">Flask · ChromaDB · Mistral 7B</div>
+          </div>
+        </article>
+
+        <article class="card" data-modal="social">
+          <div class="card-poster v-social">
+            <div class="card-poster-pattern"></div>
+            <div class="card-tag">Full-Stack · 2025</div>
+            <h3 class="card-name">Social Auto-Post</h3>
+            <div class="card-sub">Multi-Platform Publisher</div>
+          </div>
+          <div class="card-info">
+            <div class="card-info-row">
+              <button class="card-icon-btn primary" title="View"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7L8 5z"/></svg></button>
+              <a class="card-icon-btn" href="https://github.com/harsh20048" target="_blank" rel="noopener" title="GitHub"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.16c-3.34.72-4.04-1.41-4.04-1.41-.55-1.39-1.34-1.76-1.34-1.76-1.1-.75.08-.74.08-.74 1.21.09 1.85 1.24 1.85 1.24 1.08 1.85 2.84 1.32 3.53 1.01.11-.78.42-1.32.76-1.62-2.67-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.39 1.24-3.23-.12-.31-.54-1.53.12-3.19 0 0 1.01-.32 3.31 1.23A11.46 11.46 0 0 1 12 5.8c1.02 0 2.05.14 3.01.4 2.3-1.55 3.31-1.23 3.31-1.23.66 1.66.24 2.88.12 3.19.77.84 1.24 1.92 1.24 3.23 0 4.62-2.81 5.65-5.49 5.94.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.56 21.8 24 17.31 24 12c0-6.63-5.37-12-12-12z"/></svg></a>
+              <button class="card-icon-btn" title="More Info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></button>
+            </div>
+            <div class="card-info-meta">
+              <span class="match">90% Match</span>
+              <span class="pill">2025</span>
+              <span>OAuth</span>
+            </div>
+            <div class="card-info-tags">Node · Express · LinkedIn · Meta</div>
+          </div>
+        </article>
+
+      </div>
+      <button class="scroll-btn right" data-scroll="next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
+    </div>
+  </section>
+
+  <!-- Internship Experience -->
+  <section class="row" id="experience">
+    <div class="row-header">
+      <h2 class="row-title" data-title-harsh="Internship Experience" data-title-recruiter="Industry Experience">Internship Experience</h2>
+    </div>
+    <div class="row-scroller-wrap">
+      <button class="scroll-btn left" data-scroll="prev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></button>
+      <div class="row-scroller">
+
+        <article class="card" data-modal="hb">
+          <div class="card-poster v-hb">
+            <div class="card-poster-pattern"></div>
+            <div class="card-tag">Jan — Apr 2026</div>
+            <h3 class="card-name">HustleBee</h3>
+            <div class="card-sub">Full-Stack Developer Intern</div>
+          </div>
+        </article>
+
+        <article class="card" data-modal="rr">
+          <div class="card-poster v-rr">
+            <div class="card-poster-pattern"></div>
+            <div class="card-tag">Jul — Dec 2025</div>
+            <h3 class="card-name">Rolls-Royce</h3>
+            <div class="card-sub">Automation Engineer Intern</div>
+          </div>
+        </article>
+
+        <article class="card" data-modal="cs">
+          <div class="card-poster v-cs">
+            <div class="card-poster-pattern"></div>
+            <div class="card-tag">Nov 2024 — Feb 2025</div>
+            <h3 class="card-name">Contisoft</h3>
+            <div class="card-sub">Software Engineer Intern</div>
+          </div>
+        </article>
+
+      </div>
+      <button class="scroll-btn right" data-scroll="next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
+    </div>
+  </section>
+
+  <!-- Skills -->
+  <section class="row" id="skills">
+    <div class="row-header">
+      <h2 class="row-title" data-title-harsh="Technical Toolkit" data-title-recruiter="Technical Stack">Technical Toolkit</h2>
+    </div>
+    <div class="row-scroller-wrap">
+      <button class="scroll-btn left" data-scroll="prev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></button>
+      <div class="row-scroller">
+
+        <article class="card card-skill">
+          <div class="card-poster v-llm">
+            <div class="card-poster-pattern"></div>
+            <div class="card-tag">Genre · AI/LLM</div>
+            <h3 class="card-name">AI &amp; LLM</h3>
+            <div class="skill-list">
+              <span>LangChain / LangGraph</span>
+              <span>RAG &amp; Vector DBs</span>
+              <span>Fine-Tuning · Ollama</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card card-skill">
+          <div class="card-poster v-backend">
+            <div class="card-poster-pattern"></div>
+            <div class="card-tag">Genre · Backend</div>
+            <h3 class="card-name">Backend</h3>
+            <div class="skill-list">
+              <span>FastAPI · Flask</span>
+              <span>Node / Express</span>
+              <span>RabbitMQ · Redis</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card card-skill">
+          <div class="card-poster v-langs">
+            <div class="card-poster-pattern"></div>
+            <div class="card-tag">Genre · Languages</div>
+            <h3 class="card-name">Languages</h3>
+            <div class="skill-list">
+              <span>Python · SQL</span>
+              <span>TypeScript</span>
+              <span>JavaScript</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card card-skill">
+          <div class="card-poster v-data">
+            <div class="card-poster-pattern"></div>
+            <div class="card-tag">Genre · Data/ML</div>
+            <h3 class="card-name">Data &amp; ML</h3>
+            <div class="skill-list">
+              <span>Pandas · NumPy</span>
+              <span>Scikit-learn · TensorFlow</span>
+              <span>OCR · Web Scraping</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card card-skill">
+          <div class="card-poster v-db">
+            <div class="card-poster-pattern"></div>
+            <div class="card-tag">Genre · Databases</div>
+            <h3 class="card-name">Databases</h3>
+            <div class="skill-list">
+              <span>PostgreSQL · MongoDB</span>
+              <span>ChromaDB</span>
+              <span>MySQL · SQLite</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card card-skill">
+          <div class="card-poster v-devops">
+            <div class="card-poster-pattern"></div>
+            <div class="card-tag">Genre · DevOps</div>
+            <h3 class="card-name">Infrastructure</h3>
+            <div class="skill-list">
+              <span>Docker · CI/CD</span>
+              <span>GitHub Actions</span>
+              <span>OpenTelemetry · FFmpeg</span>
+            </div>
+          </div>
+        </article>
+
+      </div>
+      <button class="scroll-btn right" data-scroll="next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
+    </div>
+  </section>
+
+  <!-- Honors -->
+  <section class="row" id="honors">
+    <div class="row-header">
+      <h2 class="row-title" data-title-harsh="Honors &amp; Distinctions" data-title-recruiter="Credentials &amp; Research">Honors &amp; Distinctions</h2>
+    </div>
+    <div class="row-scroller-wrap">
+      <button class="scroll-btn left" data-scroll="prev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></button>
+      <div class="row-scroller">
+
+        <article class="card">
+          <div class="card-poster v-patent">
+            <div class="card-poster-pattern"></div>
+            <div class="card-tag">Patent · Filed</div>
+            <h3 class="card-name">CoT Compression</h3>
+            <div class="card-sub">Semantic Reasoning in LLMs</div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-poster v-hack">
+            <div class="card-poster-pattern"></div>
+            <div class="card-tag">Hackathon · 2024</div>
+            <h3 class="card-name">Top 5 of 99</h3>
+            <div class="card-sub">ACE Hack</div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-poster v-edu">
+            <div class="card-poster-pattern"></div>
+            <div class="card-tag">Education · 2026</div>
+            <h3 class="card-name">B.Tech CS</h3>
+            <div class="card-sub">SRM IST · CGPA 8.04</div>
+          </div>
+        </article>
+
+        <article class="card harsh-only">
+          <div class="card-poster v-athl">
+            <div class="card-poster-pattern"></div>
+            <div class="card-tag">Athletics</div>
+            <h3 class="card-name">Gold Medal</h3>
+            <div class="card-sub">National Karate · Black Belt Taekwondo</div>
+          </div>
+        </article>
+
+      </div>
+      <button class="scroll-btn right" data-scroll="next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
+    </div>
+  </section>
+
+</main>
+
+<!-- ========================== MODAL ========================== -->
+<div class="modal-backdrop" id="modal">
+  <article class="modal">
+    <button class="modal-close" id="modalClose"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="6" y1="6" x2="18" y2="18"/><line x1="6" y1="18" x2="18" y2="6"/></svg></button>
+    <div class="modal-hero" id="modalHero"></div>
+    <div class="modal-body">
+      <div class="modal-body-grid">
+        <div>
+          <div class="modal-meta" id="modalMeta"></div>
+          <p class="modal-desc" id="modalDesc"></p>
+          <ul class="modal-bullets" id="modalBullets"></ul>
+        </div>
+        <aside class="modal-side">
+          <h4>Stack</h4>
+          <div class="tags" id="modalTags"></div>
+          <h4 style="margin-top:18px;">Links</h4>
+          <p id="modalLinks"></p>
+        </aside>
+      </div>
+    </div>
+  </article>
+</div>
+
+<!-- ========================== FOOTER ========================== -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-socials">
+      <a href="https://github.com/harsh20048" target="_blank" rel="noopener" title="GitHub"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.16c-3.34.72-4.04-1.41-4.04-1.41-.55-1.39-1.34-1.76-1.34-1.76-1.1-.75.08-.74.08-.74 1.21.09 1.85 1.24 1.85 1.24 1.08 1.85 2.84 1.32 3.53 1.01.11-.78.42-1.32.76-1.62-2.67-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.39 1.24-3.23-.12-.31-.54-1.53.12-3.19 0 0 1.01-.32 3.31 1.23A11.46 11.46 0 0 1 12 5.8c1.02 0 2.05.14 3.01.4 2.3-1.55 3.31-1.23 3.31-1.23.66 1.66.24 2.88.12 3.19.77.84 1.24 1.92 1.24 3.23 0 4.62-2.81 5.65-5.49 5.94.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.56 21.8 24 17.31 24 12c0-6.63-5.37-12-12-12z"/></svg></a>
+      <a href="https://www.linkedin.com/in/harshvardhan-gupta-t-099854287/" target="_blank" rel="noopener" title="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 0H5C2.24 0 0 2.24 0 5v14c0 2.76 2.24 5 5 5h14c2.76 0 5-2.24 5-5V5c0-2.76-2.24-5-5-5zM8 19H5V8h3v11zM6.5 6.73c-.97 0-1.75-.79-1.75-1.76s.78-1.75 1.75-1.75 1.75.78 1.75 1.75-.78 1.76-1.75 1.76zM20 19h-3v-5.6c0-3.37-4-3.11-4 0V19h-3V8h3v1.77c1.4-2.59 7-2.78 7 2.47V19z"/></svg></a>
+      <a href="mailto:harsh20048@gmail.com" title="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></a>
+    </div>
+    <div class="footer-links">
+      <div><a href="#top">Home</a><a href="#projects">Projects</a><a href="#experience">Experience</a></div>
+      <div><a href="#skills">Skills</a><a href="#honors">Honors</a><a href="assets/Harshvardhan_Gupta_Resume.pdf" target="_blank" rel="noopener">Résumé (PDF)</a></div>
+      <div><a href="mailto:harsh20048@gmail.com">Email</a><a href="https://github.com/harsh20048" target="_blank" rel="noopener">GitHub</a><a href="https://www.linkedin.com/in/harshvardhan-gupta-t-099854287/" target="_blank" rel="noopener">LinkedIn</a></div>
+    </div>
+    <div class="footer-copy">
+      © 2026 Tadikamalla Harshvardhan Gupta · Pune, India · harsh20048@gmail.com
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ===================================================
+   PROJECT DATA (for modal)
+=================================================== */
+const PROJECTS = {
+  leadforge: {
+    title: "LeadForge AI", year: "2025", match: 98, tag: "Multi-Agent",
+    poster: "v-leadforge",
+    desc: "An AI-assisted B2B lead discovery platform. Feed it a plain-language product description and a LangGraph pipeline of specialised agents researches funding signals, hiring activity, tech stacks, and public filings across six data sources, then scores companies by buying intent.",
+    bullets: [
+      "Multi-agent LangGraph pipeline across NewsAPI, GitHub, SEC EDGAR, Apollo, Crunchbase, TheirStack.",
+      "FastAPI backend with SSE pipeline streaming and rate-limit-aware caching.",
+      "React + Vite frontend with live pipeline UI and feedback capture."
+    ],
+    stack: ["FastAPI", "LangGraph", "LangChain", "Pydantic", "React", "Vite", "Three.js"],
+    github: "https://github.com/harsh20048"
+  },
+  metaads: {
+    title: "Meta Ads Studio", year: "2025", match: 96, tag: "Microservices",
+    poster: "v-metaads",
+    desc: "An autonomous AI ad-generation platform. Accepts a structured client brief over REST, fans out research to four specialist agents, generates a storyboard, then assembles a 2-minute MP4 — every state transition crash-safe (DB write always precedes queue publish).",
+    bullets: [
+      "5-stage video pipeline with human-in-the-loop QA gate.",
+      "Queue-driven microservice topology over RabbitMQ with idempotency and JWT auth.",
+      "asyncpg + Redis session store, FFmpeg assembly, Prometheus + OpenTelemetry."
+    ],
+    stack: ["Python 3.12", "FastAPI", "RabbitMQ", "PostgreSQL", "Redis", "FFmpeg", "Docker"],
+    github: "https://github.com/harsh20048"
+  },
+  cot: {
+    title: "Semantic CoT Compressor", year: "2024–25", match: 99, tag: "Patent · Filed",
+    poster: "v-cot",
+    desc: "A research prototype for adaptive semantic compression of chain-of-thought reasoning in LLMs. Compresses long reasoning traces into semantic units, reconstructs from memory alone, then judges fidelity — benchmarked against GSM8K with local and cloud models.",
+    bullets: [
+      "5-stage pipeline: baseline reasoning → complexity detection → compression → reconstruction → fidelity judge.",
+      "Dual runtime: local Ollama (Qwen3-8B, GPT-OSS-20B) and OpenRouter cloud models.",
+      "Patent filed: 'Semantic Compression of Chain-of-Thought Reasoning in LLMs.'"
+    ],
+    stack: ["TypeScript", "React", "Vite", "Ollama", "OpenRouter", "GSM8K"],
+    github: "https://github.com/harsh20048"
+  },
+  rag: {
+    title: "Auto-Learning RAG Chatbot", year: "2024", match: 94, tag: "RAG",
+    poster: "v-rag",
+    desc: "An embeddable chatbot that learns any website on its own. Drop a script tag, it crawls every page, builds a vector knowledge base, and answers via a local Mistral-7B model — zero manual data preparation.",
+    bullets: [
+      "End-to-end RAG: BeautifulSoup crawler → sentence-transformers → ChromaDB → Mistral-7B via Ollama.",
+      "Single-script embedding for any website; no backend changes to add a new domain.",
+      "Built and deployed during Contisoft internship as a public-facing site demo."
+    ],
+    stack: ["Python", "Flask", "ChromaDB", "Ollama", "Mistral 7B", "sentence-transformers"],
+    github: "https://github.com/harsh20048"
+  },
+  social: {
+    title: "Social Auto-Post", year: "2025", match: 90, tag: "OAuth · Full-stack",
+    poster: "v-social",
+    desc: "A LinkedIn + Meta + Instagram publishing application. Handles OAuth 2.0, multi-account session switching, media uploads, and per-platform payload differences behind one unified preview-and-publish UI.",
+    bullets: [
+      "LinkedIn OAuth 2.0 (OpenID + w_member_social) with multi-account switching.",
+      "Meta + Instagram Login flows including Business Login configurations.",
+      "Multer media uploads supporting JPG / PNG / MP4 with progress tracking."
+    ],
+    stack: ["Node.js", "Express", "React", "Vite", "OAuth 2.0", "LinkedIn API", "Meta Graph"],
+    github: "https://github.com/harsh20048"
+  },
+  hb: {
+    title: "HustleBee Software", year: "Jan — Apr 2026", match: 97, tag: "Full-Stack Developer Intern",
+    poster: "v-hb",
+    desc: "Built an investor CRM backend and shipped LeadForge AI — a multi-agent lead discovery service that became part of the company's sales workflow. Worked across FastAPI services, LangGraph pipelines, and a React + Vite frontend.",
+    bullets: [
+      "Designed and shipped LeadForge AI multi-agent pipeline used by sales.",
+      "Built investor CRM backend with FastAPI + PostgreSQL.",
+      "Frontend pipeline UI with live SSE streaming of agent progress."
+    ],
+    stack: ["FastAPI", "LangGraph", "PostgreSQL", "React", "Vite"],
+    github: "https://github.com/harsh20048"
+  },
+  rr: {
+    title: "Rolls-Royce Power Systems", year: "Jul — Dec 2025", match: 95, tag: "Automation Engineer Intern",
+    poster: "v-rr",
+    desc: "Worked on DocAI for enterprise document intelligence: OCR pipelines, structured data extraction, and Python test automation across power-systems workflows. First-hand exposure to enterprise-grade reliability requirements.",
+    bullets: [
+      "OCR + structured-extraction pipelines for engineering documents.",
+      "Python test automation across power-systems data flows.",
+      "Worked within an enterprise-grade reliability framework."
+    ],
+    stack: ["Python", "DocAI", "OCR", "Test Automation"],
+    github: "https://github.com/harsh20048"
+  },
+  cs: {
+    title: "Contisoft Technologies", year: "Nov 2024 — Feb 2025", match: 93, tag: "Software Engineer Intern",
+    poster: "v-cs",
+    desc: "Shipped a stamp-paper OCR pipeline and an auto-learning RAG chatbot deployed on the company site. Stack: Flask, ChromaDB, sentence-transformers, Mistral 7B via Ollama.",
+    bullets: [
+      "Stamp-paper OCR pipeline for document intake.",
+      "Auto-learning RAG chatbot deployed live on the company site.",
+      "End-to-end ownership from crawler to vector DB to LLM serving."
+    ],
+    stack: ["Flask", "ChromaDB", "Ollama", "Mistral 7B", "sentence-transformers"],
+    github: "https://github.com/harsh20048"
+  }
+};
+
+/* ===================================================
+   SPLASH + PROFILE PICKER
+=================================================== */
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.querySelector('.splash')?.remove();
+    document.body.classList.add('locked');
+  }, 2400);
+});
+
+function applyProfile(name) {
+  const slug = (name || 'harsh').toLowerCase();
+  document.body.setAttribute('data-profile', slug);
+  // Swap row titles
+  document.querySelectorAll('.row-title[data-title-' + slug + ']').forEach(el => {
+    const explore = el.querySelector('.explore');
+    el.firstChild.textContent = el.dataset['title' + slug.charAt(0).toUpperCase() + slug.slice(1)] + ' ';
+    if (explore) el.appendChild(explore);
+  });
+  // Switch nav avatar visual
+  const navAv = document.getElementById('navAvatar');
+  if (navAv) {
+    if (slug === 'recruiter') {
+      navAv.innerHTML = '<div style="width:100%;height:100%;background:linear-gradient(135deg,#c41a4f,#e50914);display:grid;place-items:center;color:#fff;font-family:Bebas Neue;font-size:18px;letter-spacing:0.04em;">R</div>';
+    } else {
+      navAv.innerHTML = '<img src="assets/harshvardhan-gupta-profile.jpeg" alt="Harsh" />';
+    }
+  }
+}
+
+document.querySelectorAll('.profile').forEach(p => {
+  p.addEventListener('click', () => {
+    applyProfile(p.dataset.name);
+    document.getElementById('profileScreen').classList.add('hidden');
+    document.body.classList.remove('locked');
+    setTimeout(() => {
+      document.querySelector('.hero:not(.harsh-only):not(.recruiter-only), .hero[data-profile-current]')?.classList.add('fade-in');
+    }, 100);
+  });
+});
+
+document.getElementById('navAvatar')?.addEventListener('click', () => {
+  document.getElementById('profileScreen').classList.remove('hidden');
+  document.body.classList.add('locked');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+/* ===================================================
+   NAV scroll
+=================================================== */
+const nav = document.getElementById('nav');
+const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 50);
+window.addEventListener('scroll', onScroll, { passive: true });
+onScroll();
+
+/* Section-aware active link */
+const sections = ['#top', '#projects', '#experience', '#skills', '#honors'];
+const navLinks = document.querySelectorAll('.nav-links a');
+function setActive() {
+  const y = window.scrollY + 100;
+  let current = '#top';
+  sections.forEach(id => {
+    const el = document.querySelector(id);
+    if (el && el.offsetTop <= y) current = id;
+  });
+  navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === current));
+}
+window.addEventListener('scroll', setActive, { passive: true });
+
+/* ===================================================
+   SMOOTH SCROLL anchors
+=================================================== */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const id = a.getAttribute('href');
+    if (id.length > 1) {
+      const t = document.querySelector(id);
+      if (t) {
+        e.preventDefault();
+        window.scrollTo({ top: t.getBoundingClientRect().top + window.scrollY - 60, behavior: 'smooth' });
+      }
+    }
+  });
+});
+
+/* ===================================================
+   ROW SCROLL buttons
+=================================================== */
+document.querySelectorAll('.scroll-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const wrap = btn.closest('.row-scroller-wrap');
+    const scroller = wrap.querySelector('.row-scroller');
+    const card = scroller.querySelector('.card');
+    if (!card) return;
+    const step = (card.offsetWidth + 6) * Math.max(1, Math.floor(scroller.offsetWidth / (card.offsetWidth + 6)));
+    scroller.scrollBy({ left: btn.dataset.scroll === 'next' ? step : -step, behavior: 'smooth' });
+  });
+});
+
+/* ===================================================
+   MODAL
+=================================================== */
+const modal = document.getElementById('modal');
+const modalHero = document.getElementById('modalHero');
+const modalMeta = document.getElementById('modalMeta');
+const modalDesc = document.getElementById('modalDesc');
+const modalBullets = document.getElementById('modalBullets');
+const modalTags = document.getElementById('modalTags');
+const modalLinks = document.getElementById('modalLinks');
+
+function openModal(key) {
+  const p = PROJECTS[key];
+  if (!p) return;
+  modalHero.className = 'modal-hero card-poster ' + p.poster;
+  modalHero.innerHTML = `<h2 class="modal-title">${p.title}</h2>
+    <div class="modal-actions">
+      <a class="btn btn-play" href="${p.github}" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.16c-3.34.72-4.04-1.41-4.04-1.41-.55-1.39-1.34-1.76-1.34-1.76-1.1-.75.08-.74.08-.74 1.21.09 1.85 1.24 1.85 1.24 1.08 1.85 2.84 1.32 3.53 1.01.11-.78.42-1.32.76-1.62-2.67-.3-5.47-1.34-5.47-5.95 0-1.31.47-2.39 1.24-3.23-.12-.31-.54-1.53.12-3.19 0 0 1.01-.32 3.31 1.23A11.46 11.46 0 0 1 12 5.8c1.02 0 2.05.14 3.01.4 2.3-1.55 3.31-1.23 3.31-1.23.66 1.66.24 2.88.12 3.19.77.84 1.24 1.92 1.24 3.23 0 4.62-2.81 5.65-5.49 5.94.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.56 21.8 24 17.31 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        View on GitHub
+      </a>
+    </div>`;
+  modalMeta.innerHTML = `<span class="match">${p.match}% Match</span><span class="pill">${p.year}</span><span>${p.tag}</span>`;
+  modalDesc.textContent = p.desc;
+  modalBullets.innerHTML = p.bullets.map(b => `<li>${b}</li>`).join('');
+  modalTags.innerHTML = p.stack.map(s => `<span>${s}</span>`).join('');
+  modalLinks.innerHTML = `<a href="${p.github}" target="_blank" rel="noopener" style="color:#5eaaf0">GitHub Profile ↗</a>`;
+  modal.classList.add('open');
+  document.body.classList.add('locked');
+}
+
+function closeModal() {
+  modal.classList.remove('open');
+  document.body.classList.remove('locked');
+}
+
+document.querySelectorAll('[data-modal]').forEach(el => {
+  el.addEventListener('click', e => {
+    // Don't trigger if a link inside (like github) was clicked
+    if (e.target.closest('a[href^="http"]')) return;
+    openModal(el.dataset.modal);
+  });
+});
+document.getElementById('modalClose').addEventListener('click', closeModal);
+modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+</script>
+</body>
+</html>
