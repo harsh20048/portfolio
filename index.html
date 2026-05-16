@@ -150,15 +150,25 @@ img { max-width: 100%; display: block; }
 .nav-left { display: flex; align-items: center; gap: 32px; }
 .logo {
   font-family: var(--display);
-  font-size: clamp(18px, 3.4vw, 28px);
+  font-size: clamp(24px, 4vw, 32px);
   color: var(--red);
   letter-spacing: 0.04em;
   font-weight: 400;
-  line-height: 1;
+  line-height: 0.92;
   white-space: nowrap;
   user-select: none;
+  display: grid;
+  gap: 2px;
 }
-.logo span { color: var(--white); }
+.logo span {
+  font-family: var(--sans);
+  color: var(--white);
+  font-size: clamp(9px, 1.3vw, 11px);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
 
 .nav-links { display: none; gap: 22px; }
 .nav-links a {
@@ -950,7 +960,7 @@ body:not([data-profile]) .harsh-only { visibility: hidden; }
 <!-- ========================== NAV ========================== -->
 <nav class="nav" id="nav">
   <div class="nav-left">
-    <span class="logo">Tadikamalla Harshvardhan Gupta <span>Portfolio</span></span>
+    <span class="logo">Portfolio <span>Tadikamalla Harshvardhan Gupta</span></span>
     <div class="nav-links">
       <a href="#top" class="active">Home</a>
       <a href="#projects">Projects</a>
