@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="theme-color" content="#000000" />
-<title>HARSHFLIX — Tadikamalla Harshvardhan Gupta</title>
+<title>Tadikamalla Harshvardhan Gupta Portfolio</title>
 <meta name="description" content="A Netflix-style portfolio of Tadikamalla Harshvardhan Gupta — AI & backend engineer. Patent-pending researcher. Multi-agent systems, RAG, FastAPI." />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -150,11 +150,12 @@ img { max-width: 100%; display: block; }
 .nav-left { display: flex; align-items: center; gap: 32px; }
 .logo {
   font-family: var(--display);
-  font-size: 28px;
+  font-size: clamp(18px, 3.4vw, 28px);
   color: var(--red);
   letter-spacing: 0.04em;
   font-weight: 400;
   line-height: 1;
+  white-space: nowrap;
   user-select: none;
 }
 .logo span { color: var(--white); }
@@ -671,9 +672,11 @@ img { max-width: 100%; display: block; }
 }
 .splash-text {
   font-family: var(--display);
-  font-size: clamp(48px, 12vw, 140px);
+  font-size: clamp(38px, 9vw, 112px);
   color: var(--red);
   letter-spacing: 0.04em;
+  line-height: 0.95;
+  text-align: center;
   animation: splashZoom 2.4s var(--ease) forwards;
 }
 @keyframes splashZoom {
@@ -924,7 +927,7 @@ body:not([data-profile]) .harsh-only { visibility: hidden; }
 <body class="locked">
 
 <!-- ========================== SPLASH ========================== -->
-<div class="splash"><div class="splash-text">HARSHFLIX</div></div>
+<div class="splash"><div class="splash-text">Tadikamalla Harshvardhan Gupta</div></div>
 
 <!-- ========================== PROFILE PICKER ========================== -->
 <div class="profile-screen" id="profileScreen">
@@ -947,7 +950,7 @@ body:not([data-profile]) .harsh-only { visibility: hidden; }
 <!-- ========================== NAV ========================== -->
 <nav class="nav" id="nav">
   <div class="nav-left">
-    <span class="logo">HARSH<span>FLIX</span></span>
+    <span class="logo">Tadikamalla Harshvardhan Gupta <span>Portfolio</span></span>
     <div class="nav-links">
       <a href="#top" class="active">Home</a>
       <a href="#projects">Projects</a>
@@ -1008,7 +1011,7 @@ body:not([data-profile]) .harsh-only { visibility: hidden; }
   <div class="container hero-recruiter-grid" style="padding: 0 4%;">
     <div class="hero-content fade-in" style="max-width: 640px;">
       <div class="hero-badge"><span class="label">Top Pick for You · Engineering</span></div>
-      <h1 class="hero-title">Harsh Gupta</h1>
+      <h1 class="hero-title">Tadikamalla Harshvardhan Gupta</h1>
       <div class="hero-meta">
         <span class="match">99% Match</span>
         <span class="pill">Open · June 2026</span>
@@ -1039,7 +1042,7 @@ body:not([data-profile]) .harsh-only { visibility: hidden; }
         <span class="stats-card-photo-badge">Top Pick</span>
         <span class="stats-card-photo-rank">#1</span>
         <div class="stats-card-photo-overlay">
-          <div class="name">Harsh Gupta</div>
+          <div class="name">Tadikamalla Harshvardhan Gupta</div>
           <div class="role">AI &amp; Backend Engineer</div>
         </div>
       </div>
